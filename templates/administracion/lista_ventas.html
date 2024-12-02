@@ -5,39 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de ventas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-content {
+            flex: 1; /* Se expande para ocupar todo el espacio restante si el contenido no llena la pantalla */
+        }
+
+        .footer {
+            background-color: #f8f9fa;
+            text-align: center;
+            padding: 1rem 0;
+            border-top: 1px solid #e0e0e0;
+            margin-top: auto; /* Asegura que el pie de página se desplace hacia abajo */
+        }
+
+        .navbar-brand img {
+            max-height: 40px; /* Ajusta el tamaño del logo */
+        }
+    
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">CoTian</a>
+    {% load static %}
+    <!-- Contenedor principal -->
+    <div class="content-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+            <div class="container-fluid">
+                 <!-- Agregar el logo en la navbar -->
+            <a class="navbar-brand" href="/">
+                <img src="{% static 'images/image_3_.ico' %}" alt="Logo de CoTian">
+                RapiFresh
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'lista_productos' %}">Ver inventario</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'lista_ventas' %}">Ventas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'lista_compras' %}">Compras</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/">Panel de Administración</a>
-                    </li>
-                </ul>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'lista_productos' %}">Ver Inventario</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'lista_ventas' %}">Ventas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'lista_compras' %}">Compras</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/">Panel de Administración</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
     
     {% block content %}
     <div class="container mt-4">
         <h2 class="mb-4">Lista de Ventas</h2>
         <!-- Barra de búsqueda en el encabezado (DataTables la maneja automáticamente) -->
         <table id="ventasTable" class="table table-striped table-hover">
-            <thead class="thead-dark">
+            <thead class="thead-dark table-warning">
                 <tr>
                     <th>Producto</th>
                     <th>Cantidad</th>
@@ -60,7 +98,7 @@
                 {% endfor %}
             </tbody>
         </table>
-        <a href="{% url 'registrar_venta' %}" class="btn btn-success mb-3">Registrar Venta</a>
+        <a href="{% url 'registrar_venta' %}" class="btn btn-warning mb-3">Registrar Venta</a>
         <a href="/" class="btn btn-secondary mb-3">Volver al Inicio</a>
     </div>
 
@@ -102,6 +140,10 @@
         });
     </script>
 {% endblock %}
+<!-- Pie de página -->
+<footer class="footer">
+    <p>&copy; 2024 RapiFresh. Todos los derechos reservados.</p>
+</footer>
     
 </body>
 </html>

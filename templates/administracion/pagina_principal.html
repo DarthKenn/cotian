@@ -1,121 +1,225 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página Principal - CoTian</title>
+    <title>Página Principal - RappiFresh</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Asegura que el footer se quede al fondo de la página */
         html, body {
             height: 100%;
-        }
-
-        .content-wrapper {
-            min-height: 100%;
+            margin: 0;
             display: flex;
             flex-direction: column;
         }
 
+        .content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+
+        }
+
+        .main-content {
+            flex: 1; /* Se expande para ocupar todo el espacio restante si el contenido no llena la pantalla */
+        }
+
         .footer {
-            margin-top: auto;
+            background-color: #f8f9fa;
+            text-align: center;
+            padding: 1rem 0;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        /* Estilo base para los cards */
+        .card {
+        transition: all 0.3s ease; /* Transición suave para el efecto */
+        border: 1px solid #ddd; /* Borde estándar */
+        border-radius: 10px; /* Bordes redondeados */
+        }
+
+    /* Efecto al pasar el cursor (hover) */
+        .card:hover {
+        box-shadow: 0px 6px 15px rgba(255, 193, 7, 0.4); /* Sombra naranja (warning) */
+        border: 2px solid #ffc107; /* Borde naranja (warning) */
+        transform: scale(1.03); /* Ligeramente más grande */
+        }
+
+    /* Opcional: cambiar el color del texto dentro del card al pasar el mouse */
+        .card:hover .card-title,
+        .card:hover .card-text {
+        color: #ffc107; /* Naranja (warning) */
+        }
+
+        a.card-link {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .navbar-brand img {
+            max-height: 40px; /* Ajusta el tamaño del logo */
+        }
+
+        /* Estilo para el container del banner */
+        .banner-container {
+        background-size: cover; /* Ajusta el tamaño de la imagen para que cubra todo el espacio */
+        background-position: center; /* Centra la imagen */
+        color: white; /* Color de texto para mayor contraste */
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Sombra para texto */
+        position: relative; /* Necesario para posicionar las capas */
+        height: 300px; /* Altura del banner */
+        overflow: hidden; /* Ocultar contenido fuera del contenedor */
+        }
+
+         /* Fondo del banner con desenfoque */
+        .banner-background {
+            background-image: url("{% static 'images/banner_frutas2.jpg' %}"); /* Ruta de la imagen */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover; /* Ajustar tamaño */
+            background-position: center; /* Centrar imagen */
+            filter: blur(6px); /* Aplicar desenfoque */
+            z-index: 1; /* Ponerlo detrás del contenido principal */
+        }
+
+
+        /* Contenido principal del banner */
+        
+         .banner-content {
+            position: relative;
+            z-index: 2; /* Asegurar que esté por encima del fondo */
+            color: white; /* Contraste para el texto */
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* Sombra para mejor visibilidad */
+        }
+
+
+    /* Logo dentro del banner */
+        .welcome-logo {
+        max-width: 150px; /* Ajusta el tamaño del logo */
+        height: auto; /* Mantén las proporciones */
+        margin-bottom: 15px;
+        }
+
+    /* Estilo del texto de bienvenida */
+        .welcome-text {
+        font-size: 2rem; /* Ajusta el tamaño del texto */
+        font-weight: bold;
         }
     </style>
 </head>
 
 <body>
-
-    <!-- Barra de navegación -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">CoTian</a>
+    <!-- Contenedor principal -->
+    <div class="content-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+            <div class="container-fluid">
+                 <!-- Agregar el logo en la navbar -->
+            <a class="navbar-brand" href="/">
+                <img src="{% static 'images/image_3_.ico' %}" alt="Logo de CoTian">
+                RapiFresh
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'lista_productos' %}">Ver Inventario</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'lista_ventas' %}">Ventas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'lista_compras' %}">Compras</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/">Panel de Administración</a>
-                    </li>
-                </ul>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'lista_productos' %}">Ver Inventario</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'lista_ventas' %}">Ventas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'lista_compras' %}">Compras</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/">Panel de Administración</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid banner-container d-flex align-items-center justify-content-center">
+            <div class="banner-background"></div> <!-- Fondo desenfocado -->
+            <div class="text-center banner-content">
+                <img src="{% static 'images/image_3_.ico' %}" alt="Logo de Bienvenida" class="welcome-logo">
+                <h1 class="welcome-text">¡Bienvenido a RapiFresh!</h1>
             </div>
         </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <div class="container-fluid bg-primary text-white py-5">
-        <div class="container text-center">
-            <h1 class="display-4 mb-3">Bienvenido a CoTian</h1>
-            <p class="lead mb-4">Tu sistema de gestión empresarial para ventas, compras e inventarios</p>
-        </div>
-    </div>
-
-    <!-- Opciones de Navegación -->
-    <div class="container mt-5">
-        <div class="row text-center">
-            <div class="col-md-3 mb-4">
-                <div class="card shadow-lg border-light rounded-3">
-                    <div class="card-body">
-                        <i class="fas fa-warehouse fa-3x mb-3"></i>
-                        <h5 class="card-title">Ver Inventario</h5>
-                        <p class="card-text">Consulta todos los productos disponibles en tu inventario.</p>
-                        <a href="{% url 'lista_productos' %}" class="btn btn-info">Ir</a>
-                    </div>
+        <!-- Opciones de Navegación -->
+        <div class="container mt-5 main-content">
+            <div class="row text-center">
+                <!-- Inventario -->
+                <div class="col-md-3 mb-4">
+                    <a href="{% url 'lista_productos' %}" class="card-link">
+                        <div class="card shadow-lg border-light rounded-3">
+                            <div class="card-body">
+                                <i class="fas fa-warehouse fa-3x mb-3"></i>
+                                <h5 class="card-title">Ver Inventario</h5>
+                                <p class="card-text">Consulta todos los productos disponibles en tu inventario.</p>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </div>
 
-            <div class="col-md-3 mb-4">
-                <div class="card shadow-lg border-light rounded-3">
-                    <div class="card-body">
-                        <i class="fas fa-cash-register fa-3x mb-3"></i>
-                        <h5 class="card-title">Ventas</h5>
-                        <p class="card-text">Ver ventas y registra todas tus ventas de forma sencilla y rápida.</p>
-                        <a href="{% url 'lista_ventas' %}" class="btn btn-primary">Ir</a>
-                    </div>
+                <!-- Ventas -->
+                <div class="col-md-3 mb-4">
+                    <a href="{% url 'lista_ventas' %}" class="card-link">
+                        <div class="card shadow-lg border-light rounded-3">
+                            <div class="card-body">
+                                <i class="fas fa-cash-register fa-3x mb-3"></i>
+                                <h5 class="card-title">Ventas</h5>
+                                <p class="card-text">Ver ventas y registra todas tus ventas de forma sencilla y rápida.</p>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </div>
 
-            <div class="col-md-3 mb-4">
-                <div class="card shadow-lg border-light rounded-3">
-                    <div class="card-body">
-                        <i class="fas fa-truck-loading fa-3x mb-3"></i>
-                        <h5 class="card-title">Compras</h5>
-                        <p class="card-text">Ver compras y reabastece tu inventario cuando sea necesario.</p>
-                        <a href="{% url 'lista_compras' %}" class="btn btn-success">Ir</a>
-                    </div>
+                <!-- Compras -->
+                <div class="col-md-3 mb-4">
+                    <a href="{% url 'lista_compras' %}" class="card-link">
+                        <div class="card shadow-lg border-light rounded-3">
+                            <div class="card-body">
+                                <i class="fas fa-truck-loading fa-3x mb-3"></i>
+                                <h5 class="card-title">Compras</h5>
+                                <p class="card-text">Ver compras y reabastece tu inventario cuando sea necesario.</p>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </div>
 
-            <div class="col-md-3 mb-4">
-                <div class="card shadow-lg border-light rounded-3">
-                    <div class="card-body">
-                        <i class="fas fa-cogs fa-3x mb-3"></i>
-                        <h5 class="card-title">Gestión Avanzada</h5>
-                        <p class="card-text">Accede al panel de administración para una gestión avanzada.</p>
-                        <a href="/admin/" class="btn btn-secondary">Ir</a>
-                    </div>
+                <!-- Gestión Avanzada -->
+                <div class="col-md-3 mb-4">
+                    <a href="/admin/" class="card-link">
+                        <div class="card shadow-lg border-light rounded-3">
+                            <div class="card-body">
+                                <i class="fas fa-cogs fa-3x mb-3"></i>
+                                <h5 class="card-title">Gestión Avanzada</h5>
+                                <p class="card-text">Accede al panel de administración para una gestión avanzada.</p>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="text-center py-4 bg-light footer">
-        <p>&copy; 2024 CoTian. Todos los derechos reservados.</p>
+    <footer class="footer">
+        <p>&copy; 2024 RapiFresh. Todos los derechos reservados.</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
+
+

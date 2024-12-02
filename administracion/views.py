@@ -12,10 +12,10 @@ def lista_productos(request):
     if request.method == "POST":
         form = ProductoForm(request.POST)
         if form.is_valid():
-            form.save()  # Guarda el nuevo producto
-            return redirect('lista_productos')  # Recarga la página para mostrar el nuevo producto
+            form.save()
+            return redirect('lista_productos')
     else:
-        form = ProductoForm()  # Formulario vacío
+        form = ProductoForm()
     return render(request, "administracion/lista_productos.html", {"productos": productos, "form": form})
 
 def filtrar_productos(request):
