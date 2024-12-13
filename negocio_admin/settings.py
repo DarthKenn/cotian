@@ -28,6 +28,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+LOGIN_URL = 'login'  # La URL para la página de inicio de sesión
+LOGOUT_REDIRECT_URL = 'login'  # Redirige a la página de login después de cerrar sesión
+LOGIN_REDIRECT_URL = '/'
+
 
 
 
@@ -80,7 +84,7 @@ WSGI_APPLICATION = 'negocio_admin.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ecotiann',
+        'NAME': 'jungle',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',

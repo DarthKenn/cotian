@@ -4,12 +4,11 @@ from .models import Producto, Venta
 class ProductoForm(forms.ModelForm):
     class Meta:
         model = Producto
-        fields = ['nombre', 'descripcion', 'precio', 'stock'] 
+        fields = ['nombre', 'descripcion', 'precio'] 
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
             'descripcion': forms.TextInput(attrs={'class': 'form-control'}),
             'precio': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
-            'stock': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
         }
         
 class VentaForm(forms.ModelForm):

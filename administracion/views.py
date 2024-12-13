@@ -5,6 +5,19 @@ from django.http import JsonResponse
 from django.db.models import Q
 from django.utils import timezone
 from django.contrib import messages
+from django.db.models import Sum
+import calendar
+from django.db.models.functions import TruncMonth
+from django.db.models import Sum, Count
+from datetime import datetime
+from django.db.models import Avg
+from django.utils.dateparse import parse_date
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LogoutView
+
+class CustomLogoutView(LogoutView):
+    def get(self, request, *args, **kwargs):
+        return redirect('login')  # Redirigir a la página de inicio de sesión
 
 
 def lista_productos(request):
@@ -30,7 +43,7 @@ def obtener_precio_producto(request, producto_id):
     producto = Producto.objects.get(id=producto_id)
     return JsonResponse({'precio': producto.precio})
 
-
+@login_required
 def pagina_principal(request):
     return render(request, "administracion/pagina_principal.html")
 
@@ -52,26 +65,21 @@ def registrar_venta(request):
             messages.error(request, "El producto seleccionado no existe.")
             return render(request, 'registrar_venta.html', {'productos': productos})
 
-        if producto.stock < cantidad:
-            messages.error(request, f"No hay suficiente stock disponible para {producto.nombre}. Stock actual: {producto.stock}.")
-            return render(request, 'registrar_venta.html', {'productos': productos})
-
-        # Registrar la venta y descontar del stock
-        producto.stock -= cantidad
         producto.save()
 
         precio_total = producto.precio * cantidad
-        Venta.objects.create(
+        venta = Venta(
             producto=producto,
             cantidad=cantidad,
             total=precio_total,
-            fecha=timezone.now(),
         )
+        venta.save()  # El número de boleta se genera automáticamente aquí
 
-        messages.success(request, "Venta registrada exitosamente.")
+        messages.success(request, f"Venta registrada exitosamente con boleta #{venta.boleta}.")
         return redirect('registrar_venta')
 
     return render(request, 'administracion/registrar_venta.html', {'productos': productos})
+
 
 def lista_ventas(request):
     ventas = Venta.objects.all()  # Recupera todas las ventas registradas
@@ -136,3 +144,48 @@ def editar_producto(request, pk):
     else:
         form = ProductoForm(instance=producto)
         return render(request, 'administracion/editar_producto.html', {'form': form})
+    
+def comparar_ventas(request):
+    promedio_cantidad = None
+    promedio_precio = None
+    total_productos = None
+    total_dinero = None
+    mensaje = None
+
+    # Capturamos las fechas del rango enviadas por el usuario
+    fecha_inicio = request.GET.get('fecha_inicio')
+    fecha_fin = request.GET.get('fecha_fin')
+
+    if fecha_inicio and fecha_fin:
+        # Convertir las fechas en objetos datetime
+        fecha_inicio = parse_date(fecha_inicio)
+        fecha_fin = parse_date(fecha_fin)
+
+        if fecha_inicio and fecha_fin:
+            # Filtrar las ventas dentro del rango de fechas
+            ventas_filtradas = Venta.objects.filter(fecha__date__gte=fecha_inicio, fecha__date__lte=fecha_fin)
+
+            if ventas_filtradas.exists():
+                # Calcular promedios
+                promedio_cantidad = ventas_filtradas.aggregate(Avg('cantidad'))['cantidad__avg']
+                promedio_precio = ventas_filtradas.aggregate(Avg('total'))['total__avg']
+                
+                # Calcular totales
+                total_productos = ventas_filtradas.aggregate(Sum('cantidad'))['cantidad__sum']
+                total_dinero = ventas_filtradas.aggregate(Sum('total'))['total__sum']
+            else:
+                mensaje = "No se encontraron ventas en el periodo seleccionado."
+        else:
+            mensaje = "Las fechas proporcionadas no son válidas."
+    else:
+        mensaje = "Por favor, selecciona un rango de fechas."
+
+    return render(request, 'administracion/comparar_ventas.html', {
+        'promedio_cantidad': promedio_cantidad,
+        'promedio_precio': promedio_precio,
+        'total_productos': total_productos,
+        'total_dinero': total_dinero,
+        'mensaje': mensaje,
+        'fecha_inicio': fecha_inicio,
+        'fecha_fin': fecha_fin
+    })

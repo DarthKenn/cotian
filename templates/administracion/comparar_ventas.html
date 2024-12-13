@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparar Ventas</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-content {
+            flex: 1; /* Se expande para ocupar todo el espacio restante si el contenido no llena la pantalla */
+        }
+
+        .footer {
+            background-color: #f8f9fa;
+            text-align: center;
+            padding: 1rem 0;
+            border-top: 1px solid #e0e0e0;
+            margin-top: auto; /* Asegura que el pie de página se desplace hacia abajo */
+        }
+
+        .navbar-brand img {
+            max-height: 40px; /* Ajusta el tamaño del logo */
+        }
+    
+    </style>
+    
+</head>
+<body>
+    {% load static %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <img src="{% static 'images/image3.png' %}" alt="Logo de The Jungle">
+                The Jungle
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'pagina_principal' %}active{% endif %}" href="{% url 'pagina_principal' %}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'lista_productos' %}active{% endif %}" href="{% url 'lista_productos' %}">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'lista_ventas' %}active{% endif %}" href="{% url 'lista_ventas' %}">Ventas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'comparar_ventas' %}active{% endif %}" href="{% url 'comparar_ventas' %}">Comparar Ventas</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <form method="POST" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger text-decoration-none">Cerrar sesión</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <h1 class="text-center">Comparar Ventas</h1>
+        <form method="get" class="mt-4">
+            <div class="row mb-3">
+                <div class="col-md-5">
+                    <label for="fecha_inicio" class="form-label">Fecha de inicio:</label>
+                    <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control" value="{{ fecha_inicio|date:'Y-m-d' }}">
+                </div>
+                <div class="col-md-5">
+                    <label for="fecha_fin" class="form-label">Fecha de fin:</label>
+                    <input type="date" id="fecha_fin" name="fecha_fin" class="form-control" value="{{ fecha_fin|date:'Y-m-d' }}">
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">Comparar</button>
+                </div>
+            </div>
+        </form>
+
+        {% if mensaje %}
+            <div class="alert alert-warning text-center">{{ mensaje }}</div>
+        {% endif %}
+
+        {% if promedio_cantidad and promedio_precio and total_productos and total_dinero %}
+            <div class="mt-4">
+                <h4>Resultados del análisis:</h4>
+                <ul class="list-group">
+                    <li class="list-group-item">Promedio de cantidad de productos vendidos: {{ promedio_cantidad|floatformat:2 }}</li>
+                    <li class="list-group-item">Promedio de precio total de ventas: ${{ promedio_precio|floatformat:2 }}</li>
+                    <li class="list-group-item">Total de productos vendidos: {{ total_productos }}</li>
+                    <li class="list-group-item">Total de dinero generado: ${{ total_dinero|floatformat:2 }}</li>
+                </ul>
+            </div>
+        {% endif %}
+
+        <a href="{% url 'pagina_principal' %}" class="btn btn-secondary mt-3">Volver a la Página Principal</a>
+    </div>
+    <footer class="footer">
+        <p>&copy; 2024 The Jungle. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
