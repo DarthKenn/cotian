@@ -45,8 +45,8 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid">
                 <a class="navbar-brand" href="/">
-                    <img src="{% static 'images/image3.png' %}" alt="Logo de The Jungle">
-                    The Jungle
+                    <img src="{% static 'images/image32.png' %}" alt="Logo de The Jungle">
+                    CoTian
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -63,7 +63,10 @@
                             <a class="nav-link {% if request.resolver_match.url_name == 'lista_ventas' %}active{% endif %}" href="{% url 'lista_ventas' %}">Ventas</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% if request.resolver_match.url_name == 'comparar_ventas' %}active{% endif %}" href="{% url 'comparar_ventas' %}">Comparar Ventas</a>
+                            <a class="nav-link {% if request.resolver_match.url_name == 'lista_ventas' %}active{% endif %}" href="{% url 'lista_compras' %}">Compras</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'comparar_ventas' %}active{% endif %}" href="{% url 'comparar_ventas' %}">Estadisticas</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav ms-auto">

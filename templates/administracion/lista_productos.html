@@ -46,8 +46,8 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid">
                 <a class="navbar-brand" href="/">
-                    <img src="{% static 'images/image3.png' %}" alt="Logo de The Jungle">
-                    The Jungle
+                    <img src="{% static 'images/image32.png' %}" alt="Logo de The Jungle">
+                    CoTian
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -64,7 +64,10 @@
                             <a class="nav-link {% if request.resolver_match.url_name == 'lista_ventas' %}active{% endif %}" href="{% url 'lista_ventas' %}">Ventas</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% if request.resolver_match.url_name == 'comparar_ventas' %}active{% endif %}" href="{% url 'comparar_ventas' %}">Comparar Ventas</a>
+                            <a class="nav-link {% if request.resolver_match.url_name == 'lista_ventas' %}active{% endif %}" href="{% url 'lista_compras' %}">Compras</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'comparar_ventas' %}active{% endif %}" href="{% url 'comparar_ventas' %}">Estadisticas</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav ms-auto">
@@ -81,12 +84,13 @@
     <div class="container mt-5">
         <h1 class="text-center">Inventario</h1>
         <table class="table table-striped">
-            <thead class="table-success">
+            <thead class="table-warning">
                 <tr>
                     <th>ID</th>
                     <th>Nombre</th>
                     <th>Descripcion</th>
                     <th>Precio</th>
+                    <th>Stock</th>
                     <th></th>
                 </tr>
             </thead>
@@ -97,6 +101,7 @@
                     <td>{{ producto.nombre }}</td>
                     <td>{{ producto.descripcion }}</td>
                     <td>${{ producto.precio }}</td>
+                    <td>{{ producto.stock }}</td>
                     <td>
                         <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
                             data-bs-target="#editarProductoModal" onclick="cargarProducto({{ producto.id }})">
@@ -248,7 +253,7 @@
 
     <!-- Pie de página -->
     <footer class="footer">
-        <p>&copy; 2024 The Jungle. Todos los derechos reservados.</p>
+        <p>&copy; 2024 CoTian. Todos los derechos reservados.</p>
     </footer>
 
 </body>

@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'negocio_admin.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'jungle',
+        'NAME': 'cotian',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',

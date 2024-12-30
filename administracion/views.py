@@ -56,26 +56,32 @@ def registrar_venta(request):
 
         if not producto_id or not cantidad:
             messages.error(request, "Debe seleccionar un producto y especificar una cantidad.")
-            return render(request, 'registrar_venta.html', {'productos': productos})
+            return render(request, 'administracion/registrar_venta.html', {'productos': productos})
 
         cantidad = int(cantidad)
         try:
             producto = Producto.objects.get(id=producto_id)
         except Producto.DoesNotExist:
             messages.error(request, "El producto seleccionado no existe.")
-            return render(request, 'registrar_venta.html', {'productos': productos})
+            return render(request, 'administracion/registrar_venta.html', {'productos': productos})
 
+        if producto.stock < cantidad:
+            messages.error(request, f"No hay suficiente stock disponible para {producto.nombre}. Stock actual: {producto.stock}.")
+            return render(request, 'administracion/registrar_venta.html', {'productos': productos})
+
+        # Registrar la venta y descontar del stock
+        producto.stock -= cantidad
         producto.save()
 
         precio_total = producto.precio * cantidad
-        venta = Venta(
+        Venta.objects.create(
             producto=producto,
             cantidad=cantidad,
             total=precio_total,
+            fecha=timezone.now(),
         )
-        venta.save()  # El número de boleta se genera automáticamente aquí
 
-        messages.success(request, f"Venta registrada exitosamente con boleta #{venta.boleta}.")
+        messages.success(request, "Venta registrada exitosamente.")
         return redirect('registrar_venta')
 
     return render(request, 'administracion/registrar_venta.html', {'productos': productos})
@@ -124,6 +130,7 @@ def registrar_compra(request):
 
     productos = Producto.objects.all()
     return render(request, 'administracion/registrar_compra.html', {'productos': productos})
+
 
 def eliminar_producto(request, producto_id):
     producto = get_object_or_404(Producto, pk=producto_id)
